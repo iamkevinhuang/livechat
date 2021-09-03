@@ -1,0 +1,135 @@
+.row
+  .col-lg-4.col-md-3.col-sm-12
+    - unless flash.empty?
+      - flash.keys.each do |key|
+        - case key
+        - when 'alert'
+          .alert.alert-danger= flash[key]
+        - when 'notice'
+          .alert.alert-success= flash[key]
+        - else
+          .alert.alert-primary= flash[key]
+
+    %p
+      = link_to '#', class: 'btn btn-primary', id: 'create_new_btn' do
+        %i.bi.bi-plus
+        Tambah Room Baru
+
+    #create_new_room
+      = render 'new'
+
+    %ul.list-group
+      - @rooms.each do |room|
+        - if params[:room_id] == room.id.to_s
+          %li.list-group-item.active.list-room
+            %span
+              = link_to room.name, rooms_path(room_id: room.id), class: 'active-list-room-text'
+            %span
+              = link_to rooms_path(room_id: room.id, type: 'edit'), class: 'btn btn-icon-room-chat-active', method: :get do
+                %i.bi.bi-pencil-square
+              = button_to room_path(room), class: 'btn btn-icon-room-chat-active', method: :delete, data: { confirm: 'Apakah anda yakin untuk menghapus room ini ?' } do
+                %i.bi.bi-trash
+        - else
+          %li.list-group-item.list-room
+            %span
+              = link_to room.name, rooms_path(room_id: room.id), class: 'list-room-text'
+            %span
+              = link_to rooms_path(room_id: room.id, type: 'edit'), class: 'btn btn-icon-room-chat', method: :get do
+                %i.bi.bi-pencil-square
+              = button_to room_path(room), class: 'btn btn-icon-room-chat', method: :delete, data: { confirm: 'Apakah anda yakin untuk menghapus room ini ?' } do
+                %i.bi.bi-trash
+
+
+  .col-lg-8.col-md-9.col-sm-12
+    - if params[:type] == "edit"
+      %h3 UBAH NAMA ROOM
+      = form_for @room do |f|
+        %p
+          = f.text_field :name, class: 'form-control', placeholder: 'Masukkan Nama Room yang baru'
+        %p
+          = f.submit 'Ganti', class: 'btn btn-success'
+          = link_to 'Cancel', rooms_path(room_id: @room), class: 'btn btn-danger'
+    - elsif params[:room_id]
+      %h3= @room.name
+      .col
+        .chat{"data-channel-subscribe" => "room", "data-room-id" => "#{@room.id}", "data-user-id" => "#{@current_user.id}"}
+          - @room.messages.order('created_at').each do |room_message|
+            .chat-message-container
+              - if @current_user == room_message.user
+                .row.text-right
+                  .col.me
+                    .message-content-me
+                      %p.mb-1
+                        = room_message.content
+                      %small.author-and-timestamp-me
+                        = room_message.user.username
+                        = "-"
+                        = time_to_string(room_message.created_at)
+                    = image_tag("https://ui-avatars.com/api/?name=#{room_message.user.username}&background=0A2131&rounded=true&color=fff", class: 'avatar')
+              - else
+                .row
+                  .col-auto
+                    = image_tag("https://ui-avatars.com/api/?name=#{room_message.user.username}&background=0A2131&rounded=true&color=fff", class: 'avatar')
+                  .message-content-their
+                    %p.mb-1
+                      = room_message.content
+                    %small.author-and-timestamp-their
+                      = room_message.user.username
+                      = "-"
+                      = time_to_string(room_message.created_at)
+
+        = form_for (@room.messages.new), remote: true, :authenticity_token => true do |f|
+          .input-group.mb-3
+            = f.text_field :content, class: 'chat-input form-control', required: true, autocomplete: "off"
+            = f.hidden_field :room_id, value: @room.id
+            = f.submit 'Kirim', class: 'btn btn-primary chat-input'
+    - else
+      .alert.alert-info
+        %h3 Selamat Datang ke Server GibahIn.
+        %p 
+          Motto : 
+          %u 
+            %b.text-danger Kita perlu bergibah
+        %hr
+        %p Silahkan buat atau bergabung room yang ada disamping ini
+
+.d-none{"data-role" => "message-template-me"}
+  .chat-message-container
+    .row.text-right
+      .col.me
+        .message-content-me
+          %p.mb-1{"data-role" => 'message-text'}
+            
+          %small.author-and-timestamp-me{"data-role" => 'user-author-timestamp'}
+
+        %img.avatar{src: "", "data-role" => 'user-avatar'}
+
+.d-none{"data-role" => "message-template-their"}
+  .chat-message-container
+    .row
+      .col-auto
+        %img.avatar{src: "", "data-role" => 'user-avatar'}
+      .message-content-their
+        %p.mb-1{"data-role" => 'message-text'}
+          
+        %small.author-and-timestamp-their{"data-role" => 'user-author-timestamp'}
+        
+
+- content_for :body do
+  :javascript
+    document.addEventListener("DOMContentLoaded", (event) => {
+
+      document.getElementById("create_new_room").style.display = 'none';
+
+      document.getElementById("create_new_btn").addEventListener("click", () => {
+        document.getElementById("create_new_room").style.display = 'block';
+        }
+      );
+
+      document.getElementById("cancel_add_room_btn").addEventListener("click", () => {
+        document.getElementById("create_new_room").style.display = 'none';
+        }
+      );
+
+      document.getElementById("new_room_message")
+    });

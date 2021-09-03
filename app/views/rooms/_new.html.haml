@@ -1,0 +1,6 @@
+= form_for Room.new do |f|
+	%p
+		= f.text_field :name, class: 'form-control', placeholder: 'Masukkan Nama Room', required: true
+	%p
+		= f.submit 'Buat', class: 'btn btn-success'
+		= link_to 'Cancel', '#', class: 'btn btn-danger', id: 'cancel_add_room_btn'

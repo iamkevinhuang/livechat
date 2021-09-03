@@ -1,0 +1,137 @@
+.bg-theme{
+	background-color: #0A2131;
+}
+
+.inline{
+	display: inline;
+	margin: 0 10px;
+}
+
+.btn-logout {
+	color: #fff;
+	text-decoration: underline;
+	display: inline-block;
+	padding: 0;
+}
+
+.btn-logout:hover{
+	color: #fff;
+}
+
+.button_to{
+	display: inline;
+	margin: 0;
+}
+
+.list-room {
+	display: flex;
+	justify-content: space-between;
+}
+
+.list-room-text{
+	color: #000000;
+	text-decoration: none;
+}
+
+.active-list-room-text{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.active-list-room-text:hover{
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.btn-icon-room-chat-active {
+	color: #ffffff;
+	text-decoration: none;
+	display: inline-block;
+	padding: 0;
+}
+
+.btn-icon-room-chat-active:hover {
+	color: #ffffff;
+}
+
+.btn-icon-room-chat {
+	color: #000000;
+	text-decoration: none;
+	display: inline-block;
+	padding: 0;
+}
+
+.chat {
+	background: #ebeced;
+	height: 70vh;
+	border-radius: 5px 5px 0 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+	max-width: 100%;
+	padding-bottom: 10px;
+}
+
+.chat-input{
+	border-top: 0 none;
+	border-radius: 0 0 5px 5px;
+}
+
+.chat-message-container{
+	padding: 5px;
+}
+
+.message-content-me{
+	max-width: 60%;
+	min-width: 40%;
+	text-align: right !important;
+	padding: 5px;
+	border:  1px solid #ffffff;
+	border-radius: 5px;
+	background-color: #1672fa;
+	color: #fff;
+	margin: 0;
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.message-content-their{
+	max-width: 60%;
+	min-width: 40%;
+	padding: 5px;
+	border:  1px solid #0d6efd;
+	border-radius: 5px;
+	background-color: #ffffff;
+	color: #00000;
+	margin: 0;
+	display: inline-block;
+}
+
+.chat-message-container{
+	margin-top: 10px;
+}
+
+.author-and-timestamp-their{
+	text-align: right !important;
+	width: 100%;
+	display: inline-block;
+	color: #343a40;
+}
+
+.author-and-timestamp-me{
+	text-align: left !important;
+	width: 100%;
+	display: inline-block;
+	color: #f8f9fa;
+}
+
+.avatar{
+	display: inline-block;
+	width: 64px;
+	height: 64px;
+}
+
+.me {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+}

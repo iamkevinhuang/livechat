@@ -1,0 +1,23 @@
+#layoutAuthentication
+  #layoutAuthentication_content
+    %main
+      .container
+        .row.justify-content-center
+          .col-lg-5
+            .card.shadow-lg.border-0.rounded-lg.mt-5
+              .card-header
+                %h3.text-center.font-weight-light.my-4 Login
+              .card-body
+                - unless flash.empty?
+                  - flash.keys.each do |key|
+                    .alert.alert-danger= flash[key]
+                = form_for @user, url: sessions_path, method: :post do |f|
+                  %label.small.mb-1 Username
+                  = f.text_field :username, class: "form-control", :placeholder => "Masukkan Username", :required => true
+                  %label.small.mb-1 Password
+                  = f.password_field :password, class: "form-control", :placeholder => "Masukkan Password", :required => true
+                  .form-group.d-flex.align-items-center.justify-content-between.mt-4.mb-0
+                    %input.btn.btn-primary{:type => "submit", :value => "Login"}
+              .card-footer.text-center
+                .small.m-2
+                  %a{:href => "mailto:kvnhuang7@gmail.com"} Ingin bergabung ? Silahkan email ke kvnhuang7@gmail.com
