@@ -60,6 +60,8 @@
                   .col.me
                     .message-content-me
                       %p.mb-1
+                        - if room_message.image.attached?
+                          %p= image_tag(url_for(room_message.image), class: 'attached-image')
                         = room_message.content
                       %small.author-and-timestamp-me
                         = room_message.user.username
@@ -72,6 +74,8 @@
                     = image_tag("https://ui-avatars.com/api/?name=#{room_message.user.username}&background=0A2131&rounded=true&color=fff", class: 'avatar')
                   .message-content-their
                     %p.mb-1
+                      - if room_message.image.attached?
+                        %p= image_tag(url_for(room_message.image), class: 'attached-image')
                       = room_message.content
                     %small.author-and-timestamp-their
                       = room_message.user.username
@@ -79,6 +83,9 @@
                       = time_to_string(room_message.created_at)
 
         = form_for (@room.messages.new), remote: true, :authenticity_token => true do |f|
+          .input-group.mt-2
+            = f.label :image, 'Upload Gambar : ', class: 'mr-2'
+            = f.file_field :image, class: 'chat-input-image', accept: "image/*"
           .input-group.mb-3
             = f.text_field :content, class: 'chat-input form-control', required: true, autocomplete: "off"
             = f.hidden_field :room_id, value: @room.id
@@ -99,7 +106,8 @@
       .col.me
         .message-content-me
           %p.mb-1{"data-role" => 'message-text'}
-            
+            %p
+              %img.attached-image{src: "", "data-role" => 'attached-image'}
           %small.author-and-timestamp-me{"data-role" => 'user-author-timestamp'}
 
         %img.avatar{src: "", "data-role" => 'user-avatar'}
@@ -111,7 +119,8 @@
         %img.avatar{src: "", "data-role" => 'user-avatar'}
       .message-content-their
         %p.mb-1{"data-role" => 'message-text'}
-          
+          %p
+            %img.attached-image{src: "", "data-role" => 'attached-image'}
         %small.author-and-timestamp-their{"data-role" => 'user-author-timestamp'}
         
 

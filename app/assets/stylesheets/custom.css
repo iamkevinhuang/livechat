@@ -72,8 +72,7 @@
 }
 
 .chat-input{
-	border-top: 0 none;
-	border-radius: 0 0 5px 5px;
+	border-radius: 5px;
 }
 
 .chat-message-container{
@@ -134,4 +133,8 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: flex-start;
+}
+
+.attached-image {
+	max-width: 100%;
 }

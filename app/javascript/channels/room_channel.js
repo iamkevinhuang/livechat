@@ -30,6 +30,13 @@ $(function() {
           var content = messageTemplateTheir.children().clone(true, true);
         }
 
+        if (data.image_url.length > 0){
+          content.find('[data-role="attached-image"]').attr('src', data.image_url);
+        }
+        else{
+          content.find('[data-role="attached-image"]').css("display", "none");
+        }
+
         content.find('[data-role="user-avatar"]').attr('src', data.user_avatar);
         content.find('[data-role="message-text"]').text(data.content);
         content.find('[data-role="user-author-timestamp"]').text(data.author_and_timestamp);
