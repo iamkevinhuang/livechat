@@ -62,11 +62,20 @@
                       %p.mb-1
                         - if room_message.image.attached?
                           %p= image_tag(url_for(room_message.image), class: 'attached-image')
+                        - if room_message.reply_to
+                          .alert.alert-info.text-left.mb-0
+                            %b 
+                              = room_message.reply_to.user.username.titleize
+                            %hr.mb-0.mt-0
+                            = room_message.reply_to.content
                         = room_message.content
-                      %small.author-and-timestamp-me
-                        = room_message.user.username
-                        = "-"
-                        = time_to_string(room_message.created_at)
+                      %small
+                        .author-and-timestamp-me
+                          = link_to 'Balas', "/rooms?room_id=#{room_message.room.id}&reply_to=#{room_message.id}&message=#{room_message.content}&author=#{room_message.user.username.titleize}", class: 'badge badge-warning', id: 'reply_button', remote: true
+                          = " | "
+                          = room_message.user.username.titleize
+                          = "-"
+                          = time_to_string(room_message.created_at)
                     = image_tag("https://ui-avatars.com/api/?name=#{room_message.user.username}&background=0A2131&rounded=true&color=fff", class: 'avatar')
               - else
                 .row
@@ -76,19 +85,35 @@
                     %p.mb-1
                       - if room_message.image.attached?
                         %p= image_tag(url_for(room_message.image), class: 'attached-image')
+                      - if room_message.reply_to
+                        .alert.alert-info.text-left.mb-0
+                          %b 
+                            = room_message.reply_to.user.username.titleize
+                          %hr.mb-0.mt-0
+                          = room_message.reply_to.content
                       = room_message.content
-                    %small.author-and-timestamp-their
-                      = room_message.user.username
-                      = "-"
-                      = time_to_string(room_message.created_at)
+                    %small
+                      .author-and-timestamp-their
+                        = link_to 'Balas', "/rooms?room_id=#{room_message.room.id}&reply_to=#{room_message.id}&message=#{room_message.content}&author=#{room_message.user.username.titleize}", class: 'badge badge-warning', id: 'reply_button', remote: true
+                        = " | "
+                        = room_message.user.username.titleize
+                        = "-"
+                        = time_to_string(room_message.created_at)
 
         = form_for (@room.messages.new), remote: true, :authenticity_token => true do |f|
+          .alert.alert-warning.alert-dismissible.fade.show#dialog-reply{:role => "alert"}
+            %strong#reply-name-dialog Contoh Nama
+            %hr.mt-0.mb-0
+            %span#reply-content-dialog Contoh Content Pesan
+            %button.close#cancel_reply{:type => "button"}
+              %span{"aria-hidden" => "true"} ×
           .input-group.mt-2
-            = f.label :image, 'Upload Gambar : ', class: 'mr-2'
-            = f.file_field :image, class: 'chat-input-image', accept: "image/*"
+            = f.label :image, 'Upload Gambar : ', class: 'mr-3'
+            = f.file_field :image, class: 'chat-input-image mb-2', accept: "image/*"
           .input-group.mb-3
             = f.text_field :content, class: 'chat-input form-control', required: true, autocomplete: "off"
             = f.hidden_field :room_id, value: @room.id
+            = f.hidden_field :reply_to_id, value: nil
             = f.submit 'Kirim', class: 'btn btn-primary chat-input'
     - else
       .alert.alert-info
@@ -105,10 +130,18 @@
     .row.text-right
       .col.me
         .message-content-me
+          .alert.alert-info.text-left.mb-0{"data-role" => 'container-of-reply'}
+            %b{"data-role" => 'reply-to-username'}
+            %hr.mb-0.mt-0
+            %span{"data-role" => 'reply-to-content'}
           %p.mb-1{"data-role" => 'message-text'}
             %p
               %img.attached-image{src: "", "data-role" => 'attached-image'}
-          %small.author-and-timestamp-me{"data-role" => 'user-author-timestamp'}
+          %small
+            .author-and-timestamp-me{"data-role" => 'user-author-timestamp'}
+              %a.badge.badge-warning#reply_button{href:"#", "data-role" => 'reply-to', "data-remote" => "true"}
+                Balas
+              |
 
         %img.avatar{src: "", "data-role" => 'user-avatar'}
 
@@ -118,10 +151,20 @@
       .col-auto
         %img.avatar{src: "", "data-role" => 'user-avatar'}
       .message-content-their
+        .alert.alert-info.text-left.mb-0{"data-role" => 'container-of-reply'}
+          %b{"data-role" => 'reply-to-username'}
+            = "Nama Pengirim"
+            = " :"
+          %hr.mb-0.mt-0
+          %span{"data-role" => 'reply-to-content'}= "Content"
         %p.mb-1{"data-role" => 'message-text'}
           %p
             %img.attached-image{src: "", "data-role" => 'attached-image'}
-        %small.author-and-timestamp-their{"data-role" => 'user-author-timestamp'}
+        %small
+          .author-and-timestamp-their{"data-role" => 'user-author-timestamp'}
+            %a.badge.badge-warning#reply_button{href: "#", "data-role" => 'reply-to', "data-remote" => "true"}
+              Balas
+            |
         
 
 - content_for :body do
@@ -131,12 +174,12 @@
       document.getElementById("create_new_room").style.display = 'none';
 
       document.getElementById("create_new_btn").addEventListener("click", () => {
-        document.getElementById("create_new_room").style.display = 'block';
+          document.getElementById("create_new_room").style.display = 'block';
         }
       );
 
       document.getElementById("cancel_add_room_btn").addEventListener("click", () => {
-        document.getElementById("create_new_room").style.display = 'none';
+          document.getElementById("create_new_room").style.display = 'none';
         }
       );
 

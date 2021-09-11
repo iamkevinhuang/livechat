@@ -37,9 +37,18 @@ $(function() {
           content.find('[data-role="attached-image"]').css("display", "none");
         }
 
+        if (data.reply_to_content.length > 0){
+          content.find('[data-role="reply-to-content"]').text(data.reply_to_content);
+          content.find('[data-role="reply-to-username"]').text(data.reply_to_username);
+        }
+        else{
+          content.find('[data-role="container-of-reply"]').css("display", "none");
+        }
+
         content.find('[data-role="user-avatar"]').attr('src', data.user_avatar);
         content.find('[data-role="message-text"]').text(data.content);
-        content.find('[data-role="user-author-timestamp"]').text(data.author_and_timestamp);
+        content.find('[data-role="user-author-timestamp"]').append(data.author_and_timestamp);
+        content.find('[data-role="reply-to"]').attr('href', "/rooms?room_id=" + data.room_id + "&reply_to=" + data.id + "&author=" + data.author_and_timestamp.split(" - ")[0] + "&message=" + data.content);
         $element.append(content);
         $element.animate({ scrollTop: $element.prop("scrollHeight")}, 1000);
       }
